@@ -51,6 +51,5 @@ O projeto está organizado nos seguintes arquivos VHDL:
 4.  Em seguida, aplique um pulso no sinal `inicia_jogo` (de '0' para '1' e de volta para '0').
 5.  Manipule o barramento `botoes_jogador` para simular as jogadas do usuário nos momentos apropriados. A simulação completa do jogo (3 níveis) pode ser observada na imagem abaixo.
 
-**(Instrução: Aqui você deve inserir a imagem da sua simulação final e bem-sucedida - `image_93e947.png`)**
 ![Simulação Funcional Completa](simulacao-vencedor.png)
 
