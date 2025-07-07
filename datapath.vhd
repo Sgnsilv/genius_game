@@ -42,7 +42,7 @@ begin
     s_cor_da_sequencia <= ROM_SEQUENCIA(to_integer(s_valor_indice));
 
 
-
+    -- Comparador de 3 bits para 'jogada_certa_out'
     jogada_certa_out <= (botoes_jogador_in(0) xnor s_cor_da_sequencia(0)) and
                         (botoes_jogador_in(1) xnor s_cor_da_sequencia(1)) and
                         (botoes_jogador_in(2) xnor s_cor_da_sequencia(2));
@@ -50,29 +50,30 @@ begin
     -- Porta OR de 3 entradas para o sinal 'botao_out'
     botao_out <= botoes_jogador_in(0) or botoes_jogador_in(1) or botoes_jogador_in(2);
 
-
+    -- Multiplexador 2-para-1 para os 'leds_cores_out'
     leds_cores_out(0) <= (s_cor_da_sequencia(0) and hab_led_in) or ('0' and (not hab_led_in));
     leds_cores_out(1) <= (s_cor_da_sequencia(1) and hab_led_in) or ('0' and (not hab_led_in));
     leds_cores_out(2) <= (s_cor_da_sequencia(2) and hab_led_in) or ('0' and (not hab_led_in));
     
-    -- Lógica de status
+    -- Lógica de status (agora também em portas lógicas)
     atingiu_nivel_out   <= '1' when (s_valor_indice = s_valor_nivel) and (s_valor_nivel > 0) else '0';
     fim_da_mostra_out   <= '1' when s_valor_indice = (s_valor_nivel - 1) and s_valor_nivel > 0 else '0';
-    led_pronto_out      <= '1' when estado_fsm_in = "0000" else '0';
-    led_fim_de_jogo_out <= '1' when estado_fsm_in = "0111" else '0';
-    led_vencedor_out    <= '1' when estado_fsm_in = "1000" else '0';
+    
+    -- Decodificador de LEDs de Status
+    led_pronto_out      <= (not estado_fsm_in(3)) and (not estado_fsm_in(2)) and (not estado_fsm_in(1)) and (not estado_fsm_in(0)); -- Estado 0000
+    led_fim_de_jogo_out <= (not estado_fsm_in(3)) and estado_fsm_in(2) and estado_fsm_in(1) and estado_fsm_in(0);             -- Estado 0111
+    led_vencedor_out    <= estado_fsm_in(3) and (not estado_fsm_in(2)) and (not estado_fsm_in(1)) and (not estado_fsm_in(0)); -- Estado 1000
 
-
-
+    
     -- Processo do contador de Nível
     process (clk, reset)
     begin
         if reset = '1' then
             s_valor_nivel <= (others => '0');
         elsif rising_edge(clk) then
-            if op_nivel_in = "10" then       -- Zerar
+            if op_nivel_in = "10" then
                 s_valor_nivel <= (others => '0');
-            elsif op_nivel_in = "01" then    -- Incrementar
+            elsif op_nivel_in = "01" then
                 s_valor_nivel <= s_valor_nivel + 1;
             end if;
         end if;
@@ -84,9 +85,9 @@ begin
         if reset = '1' then
             s_valor_indice <= (others => '0');
         elsif rising_edge(clk) then
-            if op_indice_in = "10" then      -- Zerar
+            if op_indice_in = "10" then
                 s_valor_indice <= (others => '0');
-            elsif op_indice_in = "01" then   -- Incrementar
+            elsif op_indice_in = "01" then
                 s_valor_indice <= s_valor_indice + 1;
             end if;
         end if;
