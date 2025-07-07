@@ -30,7 +30,7 @@ architecture rtl of datapath is
     type T_ROM is array (0 to 3) of std_logic_vector(2 downto 0);
     constant ROM_SEQUENCIA : T_ROM := ("001", "010", "100", "000");
 
-    constant C_DELAY_VALOR : unsigned(24 downto 0) := to_unsigned(1, 25); -- Lembre de usar um valor baixo para simular!
+    constant C_DELAY_VALOR : unsigned(24 downto 0) := to_unsigned(1, 25);
 
     signal s_valor_nivel      : unsigned(1 downto 0);
     signal s_valor_indice     : unsigned(1 downto 0);
@@ -55,7 +55,7 @@ begin
     leds_cores_out(1) <= (s_cor_da_sequencia(1) and hab_led_in) or ('0' and (not hab_led_in));
     leds_cores_out(2) <= (s_cor_da_sequencia(2) and hab_led_in) or ('0' and (not hab_led_in));
     
-    -- Lógica de status (pode ser mantida com when-else pois depende apenas de constantes)
+    -- Lógica de status
     atingiu_nivel_out   <= '1' when (s_valor_indice = s_valor_nivel) and (s_valor_nivel > 0) else '0';
     fim_da_mostra_out   <= '1' when s_valor_indice = (s_valor_nivel - 1) and s_valor_nivel > 0 else '0';
     led_pronto_out      <= '1' when estado_fsm_in = "0000" else '0';
