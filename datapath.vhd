@@ -55,7 +55,6 @@ begin
     leds_cores_out(1) <= (s_cor_da_sequencia(1) and hab_led_in) or ('0' and (not hab_led_in));
     leds_cores_out(2) <= (s_cor_da_sequencia(2) and hab_led_in) or ('0' and (not hab_led_in));
     
-    -- Lógica de status (agora também em portas lógicas)
     atingiu_nivel_out   <= '1' when (s_valor_indice = s_valor_nivel) and (s_valor_nivel > 0) else '0';
     fim_da_mostra_out   <= '1' when s_valor_indice = (s_valor_nivel - 1) and s_valor_nivel > 0 else '0';
     
